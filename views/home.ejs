@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UN Countries</title>
+  <link rel="stylesheet" href="/css/main.css" />
+
+</head>
+
+<body tabindex="-1">
+  
+  <%- include('partials/navbar',{page: ''}) %>
+  <br />
+
+  <div class="container mx-auto p-4">
+  
+  
+    <div class="hero bg-base-200 rounded-lg p-6">
+      <div class="hero-content text-center ">
+        <div class="max-w-md">
+          <h1 class="text-8xl font-bold">搜索商品储位</h1>
+          <h1 class="text-8xl font-bold">Search Product Location</h1>
+
+          <p class="py-6">Please provide your credentials below</p>
+
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    
+    
+      <form method="post" action="/" class="space-y-4">
+        <div class="flex flex-col">
+          <label for="barCode" class="text-sm font-semibold text-gray-600">Bar Code/条码</label>
+          <input id="barCode" name="barCode" type="text" placeholder="Bar Code" value="" class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500">
+        </div>
+    
+        <div class="flex flex-col">
+          <label for="productName" class="text-sm font-semibold text-gray-600">Product Name/产品名称</label>
+          <input id="productName" name="productName" type="text" placeholder="Product Name" required="" class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500">
+        </div>
+    
+        <div class="flex flex-col">
+          <label for="brand" class="text-sm font-semibold text-gray-600">Brand/品牌</label>
+          <input id="brand" name="brand" type="text" placeholder="brand" class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500">
+        </div>
+
+    
+    
+        <!-- <div class="flex flex-col">
+          <label for="email" class="text-sm font-semibold text-gray-600">Email Address</label>
+          <input id="email" name="email" type="email" placeholder="Email Address" required="" class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500">
+        </div> -->
+    
+        <input type="submit" class="bg-green-500 text-white p-2 rounded-md cursor-pointer hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-500" value="Search">
+      </form>
+    
+    
+    
+  </div>
+
+
+
+</body></html>
