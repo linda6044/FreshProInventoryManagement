@@ -15,7 +15,7 @@ const app = express();
 const clientSessions = require("client-sessions");
 
 // const HTTP_PORT = process.env.PORT || 8080;
-const HTTP_PORT = process.env.PORT || 8080
+const HTTP_PORT = process.env.PORT || 443
 
 //express.static('public') 是 Express 中的一个内置中间件，用于处理静态文件。
 app.use(express.static('public')); 
