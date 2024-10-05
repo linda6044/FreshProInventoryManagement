@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UN Countries</title>
+  <title>FreshPro Inventory Management System</title>
   <link rel="stylesheet" href="/css/main.css" />
 
   <!-- <link href="https://cdn.jsdelivr.net/npm/daisyui@4.5.0/dist/full.min.css" rel="stylesheet" type="text/css" />
@@ -21,50 +21,94 @@
       <div class="hero bg-base-200 rounded-lg p-6">
         <div class="hero-content text-center ">
           <div class="max-w-md">
-            <h1 class="text-5xl font-bold">Countries</h1>
+            <h1 class="text-5xl font-bold">Products in shelf <%= shelfLocationID %> </h1>
   
-            <p class="py-6">Browse countries, i.e., United Nations member states.  Click the 'region' buttons to filter by regions such as: <a href="/un/countries?region=Africa" class="btn btn-primary btn-xs">Africa</a> <a href="/un/countries?region=Americas" class="btn btn-primary btn-xs">Americas</a></p>
+            
   
           </div>
         </div>
       </div>
   
       <br />
-      <!-- <%= JSON.stringify(countries) %> -->
+
     
       <div class="overflow-x-auto overflow-y-hidden">
         <table class="table table-zebra">
           <!-- head -->
           
           <tbody>
-            <% countries.forEach(country=> { %>
+            <% products.forEach(product=> { %>
 
               <tr>
-                <td>   
-                  <div class="avatar">
-                    <div class="rounded h-24 min-w-40 shadow-xl">
-                      <img src="<%= country.flag %>" alt="<%= country.name %>" />
-                    </div>
-                  </div>
-                  <!-- <img class="rounded h-24 max-w-40" src="<%= country.flag %>" alt="<%= country.name %>" />  -->
-                </td>
-                <!-- <td><img src="<%= country.flag %>" alt="<%= country.name %>" /></td> -->
-
                 <td>
-                  <%= country.name %> | <a href="/un/countries?region=<%= country.Region.name %>" class="btn btn-primary mt-2 btn-xs"><%= country.Region.name %></a>
+                  <span class="font-bold">Bar Code: </span> <%= product.barCode %>  
                 </td>
 
                 <td>
-                  <span class="font-bold">Population: </span> <%= country.population.toLocaleString() %> - <span class="font-bold">Capital:</span> <%= country.capital %>
+                  <span class="font-bold">Product Name: </span> <%= product.productName %> 
                 </td>
 
-                <th>
-                  <a href="/un/countries/<%= country.a2code%>" class="btn btn-primary btn-xs">details</a>
-                </th>
+                <td>
+                  <span class="font-bold">Brand: </span> <%= product.brand %> 
+                </td>
+
+                <td>
+                  <span class="font-bold">Price: </span> <%= product.price %> 
+                </td>
+
+                <td>
+                  <span class="font-bold">Shelf Location: </span> <%= product.primaryShelfLocation %> 
+                </td>
 
               </tr>
 
               <% }); %>
+
+              <% if (products.length == 0) { %> <h1  class="text-3xl font-bold text-center" style="margin-bottom: 100px;"> Currently there is no product in this shelf location.</h1> <% } %>
+
+              <form action="" method="post" style="border:1px solid black" >
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-y-0">
+                  <div>
+                    <div class="mb-6" style="text-align: right; padding-top: 5px"><label for="barCode" class="block text-gray-700 font-medium">Bar Code: </label>
+                      
+                    </div>
+        
+
+                  </div>
+
+        
+                  <div>
+                    <div class="mb-6">
+                      
+                      <input type="text" id="barCode" name="barCode" required
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-blue-300">
+                    </div>
+                    <div class="mb-6">
+
+                    </div>
+                  </div>
+        
+        
+                  <div>
+                    <div class="mb-6">
+                      <label for="isAlternative" class="block text-gray-700 font-medium">Is Alternative Shelf Location?</label>
+                      <!-- <input type="checkbox" id="permanentUNSC" name="permanentUNSC" required
+                        class="checkbox"> -->
+                        <label class="label cursor-pointer justify-center">
+                          <input type="checkbox" name="isAlternative" class="checkbox" />
+                          <span class="label-text px-2"></span>
+                        </label>
+                    </div>
+
+                  </div>
+                </div>
+        
+                <div class="mt-6">
+                  <button type="submit" class="btn btn-primary w-full ">Add Product to Shelf Location</button>
+                </div>
+         
+              </form>
 
           </tbody>
 

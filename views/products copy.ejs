@@ -36,24 +36,6 @@
         <table class="table table-zebra">
           <!-- head -->
            <thead>
-            <th>
-              <span class="font-bold">Bar Code</span>
-            </th>
-            <th>
-              <span class="font-bold">Product Name</span>
-            </th>
-            <th>
-              <span class="font-bold">Brand</span>
-            </th>
-            <th>
-              <span class="font-bold">Price: </span>
-            </th>
-            <th>
-              <span class="font-bold">Shelf Location: </span>
-            </th>
-            <th>
-              <span class="font-bold">Alternative Shelf Location: </span>
-            </th>
           
           </thead>
           
@@ -62,27 +44,27 @@
 
               <tr>
                 <td>
-                   <%= product.barCode %>  
+                  <span class="font-bold">Bar Code: </span> <%= product.barCode %>  
                 </td>
 
                 <td>
-                   <%= product.productName %> 
+                  <span class="font-bold">Product Name: </span> <%= product.productName %> 
                 </td>
 
                 <td>
-                   <%= product.brand %> 
+                  <span class="font-bold">Brand: </span> <%= product.brand %> 
                 </td>
 
                 <td>
-                   <%= product.price %> 
+                  <span class="font-bold">Price: </span> <%= product.price %> 
                 </td>
 
                 <td>
-                  <%= product.primaryShelfLocation %> 
+                  <span class="font-bold">Shelf Location: </span> <%= product.majorShelfLocation %> 
                 </td>
 
                 <td>
-                  <%= product.alternativeShelfLocation %> 
+                  <span class="font-bold">Alternative Shelf Location: </span> <%= product.alternativeShelfLocation %> 
                 </td>
 
               </tr>

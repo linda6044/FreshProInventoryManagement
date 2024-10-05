@@ -69,82 +69,61 @@ app.get("/addProduct",ensureLogin, async (req, res) => {
 });
 
 
-app.post("/un/addCountry",ensureLogin, async (req, res) => {
-  try {
-    await unCountryData.addCountry(req.body);
-    res.redirect("/un/countries");
-  } catch (err) {
-    res.render("500", { message: `I'm sorry, but we have encountered the following error: ${err}` });
-  }
 
+
+
+app.get("/shelfLocationManagement/:scode?",ensureLogin, async (req, res) => {
+
+  const scode = req.params.scode;
+  if (!scode) res.render("shelfLocationManagement");
+  else inventoryData.getProductsByShelfLocationID(scode)
+  .then((products)=>res.render("shelf-products", {products, shelfLocationID:scode}))
+  .catch((err)=>{res.status(500).send("<h1>Error 3957</h1>")});
 });
 
-
-app.get("/un/editCountry/:code",ensureLogin, async (req, res) => {
-
-  try {
-    let country = await unCountryData.getCountryByCode(req.params.code);
-    let regions = await unCountryData.getAllRegions();
-    
-
-    res.render("editCountry", { country, regions });
-  } catch (err) {
-    res.status(404).render("404", { message: err });
-  }
-
-});
-
-app.post("/un/editCountry",ensureLogin, async (req, res) => {
-
-  try {
-    await unCountryData.editCountry(req.body.a2code, req.body);
-    res.redirect("/un/countries");
-  } catch (err) {
-    res.render("500", { message: `I'm sorry, but we have encountered the following error: ${err}` });
-  }
-});
+app.post("/shelfLocationManagement", ensureLogin, (req, res)=>{
+  let shelfLocationID="";
+  shelfLocationID += req.body.shelfNo;
+  shelfLocationID += req.body.side;
+  shelfLocationID += req.body.section;
+  shelfLocationID += req.body.level;
+  res.redirect("/shelfLocationManagement/" + shelfLocationID)
 
 
-app.get("/un/deleteCountry/:code",ensureLogin, async (req, res) => {
-  try {
-    await unCountryData.deleteCountry(req.params.code);
-    res.redirect("/un/countries");
-  } catch (err) {
-    res.status(500).render("500", { message: `I'm sorry, but we have encountered the following error: ${err}` });
-  }
 })
+
+app.post("/shelfLocationManagement/:scode", ensureLogin, (req, res)=>{
+  const scode = req.params.scode;
+  const isAlternative = !!req.body.isAlternative; 
+  inventoryData.addProductToShelf(req.body.barCode, scode, isAlternative).then(()=>{
+    
+    res.redirect(`/shelfLocationManagement/${scode}`)
+  }).catch((err)=>res.render('500', {message:err}))
+
+ 
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get('/userHistory', ensureLogin, (req, res) => {
   res.render('userHistory');
 });
 
-app.get("/un/countries", async (req,res)=>{
-  
-  let countries = [];
-
-  try{
-    if(req.query.region){
-      countries = await unCountryData.getCountriesByRegion(req.query.region);
-    }else{
-      countries = await unCountryData.getAllCountries();
-    }
-    // console.log("countries[0] in server.js:", countries[0])
-    res.render("countries", {countries})
-  }catch(err){
-    res.status(404).render("404", {message: err});
-  }
-});
 
 
 
-app.get("/un/countries/:ccode", (req,res) => {
 
-  unCountryData.getCountryByCode(req.params.ccode).then((country)=>{
-      res.render("country", {country});
-  }).catch((err)=>{
-      res.status(404).render("404", {message: err});
-  });
-});
 
 // app.get("/un/countries/region-demo", async (req,res)=>{
 //   try{

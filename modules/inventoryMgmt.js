@@ -17,7 +17,7 @@ const inventorySchema = new Schema({
         }
     },
     price: { type: Number, min: 0, set: value => Math.round(value * 100) / 100 }, // 保留两位小数
-    majorShelfLocation: String,
+    primaryShelfLocation: String,
     alternativeShelfLocation: String
 });
 
@@ -57,6 +57,73 @@ function getProductByKeyWords(string) {
     });
 }
 
+function addProductToShelf(barCode, shelfLocation, isAlternative) {
+    return new Promise((resolve, reject) => {
+        // 查找产品通过 barCode
+        Inventory.findOne({ barCode: barCode })
+            .then(product => {
+                if (!product) {
+                    // 如果没有找到产品，报错
+                    console.log("Not Found!")
+                    return reject("Product not found");
+                }
+
+                if (!isAlternative) {
+                    // 如果 isAlternative 为 false，设置 primaryShelfLocation
+                    if (product.primaryShelfLocation) {
+                        // 如果已经有 primaryShelfLocation，报错
+                        return reject("This product already had a primary shelf location.");
+                    } else {
+                        // 否则，设置 primaryShelfLocation
+                        product.primaryShelfLocation = shelfLocation;
+                    }
+                } else {
+                    // 如果 isAlternative 为 true，设置 alternativeShelfLocation
+                    if (product.alternativeShelfLocation) {
+                        // 如果已经有 alternativeShelfLocation，报错
+                        return reject("This product already had an alternative shelf location.");
+                    } else {
+                        // 否则，设置 alternativeShelfLocation
+                        product.alternativeShelfLocation = shelfLocation;
+                    }
+                }
+                return product.save();
+            })
+            .then(() => {
+                // 更新成功，resolve
+                resolve("Product shelf location updated successfully.");
+            })
+            .catch(err => {
+                // 捕获任何错误
+                reject(`Error updating product shelf location: ${err}`);
+            });
+    });
+}
+
+
+function getProductsByShelfLocationID(scode) {
+    return new Promise((resolve, reject) => {
+        
+            // 查找 primaryShelfLocation 或 alternativeShelfLocation 等于 scode 的产品
+            Inventory.find({
+            $or: [
+                { primaryShelfLocation: scode },
+                { alternativeShelfLocation: scode }
+            ]
+        })
+        .then(products => {
+            if (products.length > 0) {
+                resolve(products); // 如果找到匹配的产品，返回它们
+            } else {
+                resolve([]); // 没有匹配产品，返回空数组
+            }
+        })
+        .catch(err => {
+            reject(`Error finding products by shelf location: ${err}`); // 捕获任何错误
+        });
+    });
+}
+
 function registerNewProduct(productData) {
     return new Promise((resolve, reject) => {
         let newProduct = new Inventory(productData); // 修正 userData -> productData
@@ -73,4 +140,4 @@ function registerNewProduct(productData) {
     });
 }
 
-module.exports = { initialize, registerNewProduct, getProductByKeyWords}
+module.exports = { initialize, registerNewProduct, getProductByKeyWords, getProductsByShelfLocationID, addProductToShelf}
