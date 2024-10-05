@@ -200,7 +200,7 @@ app.post("/addProduct", ensureLogin, async (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  inventoryData.getProductByKeyWords(req.body.productName).then((products)=>res.render('products', {products})).catch((err)=>{console.log(`err: ${err}`)})
+  inventoryData.getProductByKeyWords(req.body.productName).then((products)=>res.render('products', {products})).catch((message)=>{res.render('500',{message})})
 
 });
 

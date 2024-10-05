@@ -41,7 +41,11 @@ function initialize() {
 }
 
 function getProductByKeyWords(string) {
+
+    
     return new Promise((resolve, reject) => {
+
+        if (string.trim().length < 3) return reject("Please double check your input 请检查您的输入"); 
         // 使用正则表达式进行不区分大小写的模糊匹配
         Inventory.find({ productName: { $regex: string, $options: 'i' } })
             .then(products => {
