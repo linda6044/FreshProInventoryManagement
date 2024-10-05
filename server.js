@@ -1,6 +1,5 @@
 
 
-const unCountryData = require("./modules/unCountries");
 
 const inventoryData = require("./modules/inventoryMgmt");
 
@@ -58,10 +57,6 @@ app.get('/about', (req, res) => {
 });
 
 
-app.get("/un/addCountry",ensureLogin, async (req, res) => {
-  let regions = await unCountryData.getAllRegions()
-  res.render("addCountry", { regions: regions })
-});
 
 app.get("/addProduct",ensureLogin, async (req, res) => {
 
@@ -85,7 +80,7 @@ app.post("/shelfLocationManagement", ensureLogin, (req, res)=>{
   let shelfLocationID="";
   shelfLocationID += req.body.shelfNo;
   shelfLocationID += req.body.side;
-  shelfLocationID += req.body.section;
+  if(req.body.side == "A" ||req.body.side == "B" ) shelfLocationID += req.body.section;
   shelfLocationID += req.body.level;
   res.redirect("/shelfLocationManagement/" + shelfLocationID)
 
@@ -242,7 +237,7 @@ app.use((req, res, next) => {
 inventoryData.initialize().then(()=>console.log("inventory data initialized")).catch((err)=> {console.log(`Err: ${err}`)})
 
 //updated version for A6 
-unCountryData.initialize().then(()=>{return authData.initialize()}).then(()=>{
+inventoryData.initialize().then(()=>{return authData.initialize()}).then(()=>{
   app.listen(HTTP_PORT, () => { console.log(`server listening on: ${HTTP_PORT}`) });
 }).catch((err)=> {console.log(`unable to start server: ${err}`)});
 
