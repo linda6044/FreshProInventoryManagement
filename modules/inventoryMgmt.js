@@ -40,6 +40,7 @@ function initialize() {
     });
 }
 
+// inventoryMgmt.js:
 function getProductByKeyWords(string) {
 
     
