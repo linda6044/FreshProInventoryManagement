@@ -37,22 +37,17 @@
           <!-- head -->
            <thead>
             <th>
-              <span class="font-bold">Bar Code</span>
+              <span class="font-bold">Bar Code 产品条码</span>
             </th>
             <th>
-              <span class="font-bold">Product Name</span>
+              <span class="font-bold">Product Name产品名称</span>
+            </th>
+
+            <th>
+              <span class="font-bold">Shelf Location 基本储位</span>
             </th>
             <th>
-              <span class="font-bold">Brand</span>
-            </th>
-            <th>
-              <span class="font-bold">Price: </span>
-            </th>
-            <th>
-              <span class="font-bold">Shelf Location: </span>
-            </th>
-            <th>
-              <span class="font-bold">Alternative Shelf Location: </span>
+              <span class="font-bold">Alternative Shelf Location 补充储位</span>
             </th>
           
           </thead>
@@ -69,20 +64,22 @@
                    <%= product.productName %> 
                 </td>
 
-                <td>
-                   <%= product.brand %> 
-                </td>
 
                 <td>
-                   <%= product.price %> 
-                </td>
+                  <% if(product.primaryShelfLocation) { %>
+                    <span style="width: 160px; display: inline-block">Shelf ID(货架编号): </span><%= product.primaryShelfLocation?.slice(0,2) %> <br>
+                    <% if(product.primaryShelfLocation?.length===4) %> <span style="width: 160px; display: inline-block">Section ID(分区编号): </span><%= product.primaryShelfLocation?.slice(2,3) %>  %> <br>
+                    <span style="width: 160px; display: inline-block">Level(层): </span><%= product.primaryShelfLocation?.slice(-1) %> 
+                  <%  } %>
+                  </td>
 
                 <td>
-                  <%= product.primaryShelfLocation %> 
-                </td>
-
-                <td>
-                  <%= product.alternativeShelfLocation %> 
+                  
+                  <% if(product.alternativeShelfLocation) { %>
+                    <span style="width: 160px; display: inline-block">Shelf ID(货架编号): </span><%= product.alternativeShelfLocation?.slice(0,2) %> <br>
+                    <% if(product.alternativeShelfLocation?.length===4) %> <span style="width: 160px; display: inline-block">Section ID(分区编号): </span><%= product.alternativeShelfLocation?.slice(2,3) %>  %> <br>
+                    <span style="width: 160px; display: inline-block">Level(层): </span><%= product.alternativeShelfLocation?.slice(-1) %> 
+                  <%  } %>
                 </td>
 
               </tr>

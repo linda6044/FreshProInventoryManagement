@@ -46,7 +46,7 @@ function getProductByKeyWords(string) {
     
     return new Promise((resolve, reject) => {
 
-        if (string.trim().length < 3) return reject("Please double check your input 请检查您的输入"); 
+        if (/^[a-zA-Z0-9 ]*$/.test(string) && string.trim().length < 3) return reject("Please double check your input 请检查您的输入"); 
         // 使用正则表达式进行不区分大小写的模糊匹配
         Inventory.find({ productName: { $regex: string, $options: 'i' } })
             .then(products => {
@@ -129,6 +129,50 @@ function getProductsByShelfLocationID(scode) {
     });
 }
 
+function removeProductFromShelf(barCode, shelfLocation) {
+    console.log("barCode is ",barCode, "shelfLocation is ", shelfLocation)
+    return new Promise((resolve, reject) => {
+        // 查找产品通过 barCode
+        Inventory.findOne({ barCode: barCode })
+            .then(product => {
+                if (!product) {
+                    // 如果没有找到产品，报错
+                    return reject("Product not found");
+                }
+
+                let updated = false;
+
+                // 如果产品的 primaryShelfLocation 匹配
+                if (product.primaryShelfLocation === shelfLocation) {
+                    product.primaryShelfLocation = null; // 设置为 null
+                    updated = true;
+                }
+
+                // 如果产品的 alternativeShelfLocation 匹配
+                if (product.alternativeShelfLocation === shelfLocation) {
+                    product.alternativeShelfLocation = null; // 设置为 null
+                    updated = true;
+                }
+
+                if (!updated) {
+                    // 如果没有更新任何位置，说明 shelfLocation 不匹配
+                    return reject("Shelf location not found for this product.");
+                }
+
+                // 保存更新后的产品信息
+                return product.save();
+            })
+            .then(() => {
+                resolve("Product shelf location removed successfully.");
+            })
+            .catch(err => {
+                reject(`Error removing product from shelf location: ${err}`);
+            });
+    });
+}
+
+
+
 function registerNewProduct(productData) {
     return new Promise((resolve, reject) => {
         let newProduct = new Inventory(productData); // 修正 userData -> productData
@@ -145,4 +189,4 @@ function registerNewProduct(productData) {
     });
 }
 
-module.exports = { initialize, registerNewProduct, getProductByKeyWords, getProductsByShelfLocationID, addProductToShelf}
+module.exports = { initialize, registerNewProduct, getProductByKeyWords, getProductsByShelfLocationID, addProductToShelf, removeProductFromShelf}

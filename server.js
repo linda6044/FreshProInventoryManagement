@@ -13,6 +13,7 @@ const app = express();
 //会话是用来在客户端和服务器之间存储状态信息的一种机制，通常用于跟踪用户的登录状态、购物车内容等。
 const clientSessions = require("client-sessions");
 
+
 // const HTTP_PORT = process.env.PORT || 8080;
 const HTTP_PORT = process.env.PORT || 8080
 
@@ -20,6 +21,8 @@ const HTTP_PORT = process.env.PORT || 8080
 app.use(express.static('public')); 
 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());  // 用于解析 JSON 格式的请求体
 
 app.use(clientSessions({
   cookieName: "session", // this is the object name that will be added to 'req'
@@ -98,6 +101,18 @@ app.post("/shelfLocationManagement/:scode", ensureLogin, (req, res)=>{
  
 })
 
+app.post('/removeProductFromShelf', ensureLogin, (req, res) => {
+  const { barCode, shelfLocation } = req.body;
+  console.log("in app.post, barCode is ", barCode, "shelfLocation is ", shelfLocation)
+
+  inventoryData.removeProductFromShelf(barCode, shelfLocation)
+    .then(() => {
+      res.json({ message: "Product removed from shelf successfully." });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err });
+    });
+});
 
 
 
@@ -153,7 +168,6 @@ app.post('/login', (req, res) => {
 });
 
 
-
 // app.post('/register', (req, res) => {
   
 //   authData.registerUser(req.body).then(
@@ -203,9 +217,6 @@ app.post('/', (req, res) => {
   inventoryData.getProductByKeyWords(req.body.productName).then((products)=>res.render('products', {products})).catch((message)=>{res.render('500',{message})})
 
 });
-
-
-
 
 app.get('/logout', (req, res) => {
   req.session.reset();

@@ -11,7 +11,7 @@
 
 <body tabindex="-1">
   
-  <%- include('partials/navbar',{page: ''}) %>
+  <%- include('partials/navbar',{page: '/'}) %>
   <br />
 
   <div class="container mx-auto p-4">
@@ -23,7 +23,7 @@
           <h1 class="text-8xl font-bold">搜索商品储位</h1>
           <h1 class="text-8xl font-bold">Search Product Location</h1>
 
-          <p class="py-6">Please provide your credentials below</p>
+          <p class="py-6">请提供产品信息<br>Please provide product information</p>
 
         </div>
       </div>
@@ -34,10 +34,12 @@
     
     
       <form method="post" action="/" class="space-y-4">
+        <% if (session.user) { %>
         <div class="flex flex-col">
           <label for="barCode" class="text-sm font-semibold text-gray-600">Bar Code/条码</label>
           <input id="barCode" name="barCode" type="text" placeholder="Bar Code" value="" class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500">
         </div>
+        <% } %>
     
         <div class="flex flex-col">
           <label for="productName" class="text-sm font-semibold text-gray-600">Product Name/产品名称</label>
